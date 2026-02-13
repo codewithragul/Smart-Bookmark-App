@@ -24,3 +24,144 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/*  */
+/* ===== GLOBAL RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  min-height: 100vh;
+}
+
+/* ===== DASHBOARD WRAPPER ===== */
+.dashboard-container {
+  max-width: 600px;
+  margin: 80px auto;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  transition: 0.3s ease;
+}
+
+.dashboard-container:hover {
+  transform: translateY(-5px);
+}
+
+/* ===== TITLE ===== */
+.dashboard-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #222;
+}
+
+/* ===== FORM ===== */
+.bookmark-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.bookmark-input {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.bookmark-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+/* ===== ADD BUTTON ===== */
+.add-btn {
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.add-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+/* ===== BOOKMARK LIST ===== */
+.bookmark-list {
+  margin-top: 20px;
+}
+
+.bookmark-card {
+  background: #f8f9ff;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.3s;
+}
+
+.bookmark-card:hover {
+  background: #eef0ff;
+}
+
+.bookmark-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.bookmark-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #222;
+}
+
+.bookmark-url {
+  font-size: 13px;
+  color: #667eea;
+  text-decoration: none;
+  margin-top: 3px;
+}
+
+.bookmark-url:hover {
+  text-decoration: underline;
+}
+
+/* ===== DELETE BUTTON ===== */
+.delete-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #ff4d4f;
+  color: white;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.delete-btn:hover {
+  background: #d9363e;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-text {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin-top: 10px;
+}
