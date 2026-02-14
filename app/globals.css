@@ -34,15 +34,18 @@ body {
 }
 
 body {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  min-height: 100vh;
+   background:url(photos/Awesome-Desktop-Wallpaper-Aesthetic-Background.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 90vh;
 }
 
 /* ===== DASHBOARD WRAPPER ===== */
 .dashboard-container {
   max-width: 600px;
   margin: 80px auto;
-  background: #ffffff;
+  background:transparent;
   padding: 40px;
   border-radius: 20px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
@@ -164,4 +167,37 @@ body {
   font-size: 14px;
   color: #666;
   margin-top: 10px;
+}
+/* ===== PREMIUM INPUT ===== */
+.bookmark-input {
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 2px solid transparent;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  color: #222;
+  margin-bottom: 20px;
+}
+
+/* Hover effect */
+.bookmark-input:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Focus effect */
+.bookmark-input:focus {
+  outline: none;
+  border: 2px solid #764ba2;
+  box-shadow: 0 0 0 4px rgba(118, 75, 162, 0.15);
+  background: #ffffff;
+}
+
+/* Placeholder style */
+.bookmark-input::placeholder {
+  color: #888;
+  font-weight: 500;
 }

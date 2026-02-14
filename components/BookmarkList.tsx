@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
-
 type Bookmark = {
   id: string;
   title: string;
@@ -18,59 +17,70 @@ export default function BookmarkList({ userId }: { userId: string }) {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
 
   useEffect(() => {
+    if (!userId) return;
     fetchBookmarks();
-
-    const channel = supabase
-      .channel("bookmarks")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "bookmarks" },
-        () => fetchBookmarks()
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
+  }, [userId]);
 
   async function fetchBookmarks() {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("bookmarks")
       .select("*")
       .eq("user_id", userId)
       .order("created_at", { ascending: false });
 
+    if (error) {
+      console.error("Fetch error:", error.message);
+      return;
+    }
+
     if (data) setBookmarks(data);
   }
 
   async function addBookmark() {
-    if (!title || !url) return;
+    if (!title || !url || !userId) return;
 
-    await supabase.from("bookmarks").insert({
+    const { error } = await supabase.from("bookmarks").insert({
       title,
       url,
       user_id: userId,
     });
+
+    if (error) {
+      console.error("Insert error:", error.message);
+      return;
+    }
+
+    // ✅ Immediately refresh UI
+    await fetchBookmarks();
 
     setTitle("");
     setUrl("");
   }
 
   async function deleteBookmark(id: string) {
-    await supabase.from("bookmarks").delete().eq("id", id);
+    const { error } = await supabase
+      .from("bookmarks")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error("Delete error:", error.message);
+      return;
+    }
+
+    await fetchBookmarks();
   }
 
   return (
-    <div className="space-y-6">
-      {/* Form */}
-      <div className="bg-gray-50 p-6 rounded-xl border space-y-4">
+    <div className="flex flex-col items-center">
+      {/* FORM */}
+      <div className="w-full max-w-2xl flex flex-col gap-6">
         <input
           type="text"
           placeholder="Bookmark Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-400 outline-none transition"
+          className="w-full h-14 px-6 rounded-full bg-gray-100 border border-gray-200 shadow-inner text-center focus:outline-none focus:ring-2 focus:ring-pink-400 focus:bg-white transition-all duration-300"
         />
 
         <input
@@ -78,38 +88,35 @@ export default function BookmarkList({ userId }: { userId: string }) {
           placeholder="https://example.com"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-400 outline-none transition"
+          className="w-full h-14 px-6 rounded-full bg-gray-100 border border-gray-200 shadow-inner text-center focus:outline-none focus:ring-2 focus:ring-pink-400 focus:bg-white transition-all duration-300"
         />
 
         <button
           onClick={addBookmark}
-          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-lg transition shadow-md"
+          className="w-full h-14 rounded-full font-semibold text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95"
         >
           Add Bookmark
         </button>
       </div>
 
-      {/* List */}
-      {bookmarks.length === 0 && (
-        <div className="text-center text-gray-500 py-6">
-          No bookmarks yet. Add your first one 🚀
-        </div>
-      )}
+      {/* GAP */}
+      <div className="h-10" />
 
-      <div className="space-y-4">
+      {/* LIST */}
+      <div className="w-full max-w-2xl space-y-6">
         {bookmarks.map((bookmark) => (
           <div
             key={bookmark.id}
-            className="flex justify-between items-center bg-white border rounded-xl p-4 shadow-sm hover:shadow-md transition"
+            className="flex justify-between items-center bg-white rounded-full px-6 py-4 shadow-lg transition-all duration-300"
           >
-            <div>
+            <div className="flex flex-col items-center text-center flex-1">
               <h2 className="font-semibold text-gray-800">
                 {bookmark.title}
               </h2>
               <a
                 href={bookmark.url}
                 target="_blank"
-                className="text-sm text-indigo-600 hover:underline"
+                className="text-sm text-indigo-600 hover:text-purple-600 transition"
               >
                 {bookmark.url}
               </a>
@@ -117,7 +124,7 @@ export default function BookmarkList({ userId }: { userId: string }) {
 
             <button
               onClick={() => deleteBookmark(bookmark.id)}
-              className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded-lg text-sm transition"
+              className="w-20 h-10 rounded-full text-sm font-medium text-white bg-red-500 hover:bg-red-600 transition-all duration-300 shadow active:scale-95"
             >
               Delete
             </button>
